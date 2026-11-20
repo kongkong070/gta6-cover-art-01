@@ -3,20 +3,79 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<title>Neon Sunset Cover Studio</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
+<header class="masthead">
+  <h1>Neon Sunset Cover Studio</h1>
+  <p>Your photos, a bold caption, a Vice-style sunset grade — a poster ready to share.</p>
+</header>
+<main class="studio">
+  <section class="controls" aria-label="Cover controls">
+    <h2>1 · Layout</h2>
+    <div id="layout-pick" class="chips" role="group" aria-label="Panel layout"></div>
+
+    <h2>2 · Photos</h2>
+    <label class="file-pick">Add your photos
+      <input id="photo-files" type="file" accept="image/*" multiple>
+    </label>
+    <p class="hint">Or try a sample — made for this studio, free to use:</p>
+    <div class="samples">
+      <button type="button" data-sample="pier">Pier dusk</button>
+      <button type="button" data-sample="boulevard">Boulevard</button>
+    </div>
+    <div id="tray" class="tray" aria-label="Loaded photos"></div>
+
+    <h2>3 · Selected panel</h2>
+    <p id="panel-name" class="panel-name">Panel 1 of 4</p>
+    <p class="hint">Click a panel in the preview to select it.</p>
+    <label>Photo in this panel
+      <select id="panel-photo"></select>
+    </label>
+    <label>Zoom <span id="zoom-readout">100%</span>
+      <input id="panel-zoom" type="range" min="1" max="2.5" step="0.05" value="1">
+    </label>
+    <label>Move sideways
+      <input id="panel-x" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+    </label>
+    <label>Move up / down
+      <input id="panel-y" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+    </label>
+    <button id="fill-all" type="button">Fill all panels with this photo</button>
+    <button id="reset-frame" type="button">Reset this panel’s framing</button>
+
+    <h2>4 · Caption</h2>
+    <label>Title
+      <input id="title" type="text" maxlength="32" value="Sunset Heist">
+    </label>
+    <label>Subtitle
+      <input id="subtitle" type="text" maxlength="60" value="One last ride down the boulevard">
+    </label>
+    <label>Caption position
+      <select id="caption-place">
+        <option value="bottom" selected>Bottom of the poster</option>
+        <option value="top">Top of the poster</option>
+      </select>
+    </label>
+    <label>Lettering size <span id="scale-readout">100%</span>
+      <input id="caption-scale" type="range" min="0.7" max="1.4" step="0.05" value="1">
+    </label>
+    <div id="colour-pick" class="chips" role="group" aria-label="Caption colour"></div>
+
+    <h2>5 · Colour grade</h2>
+    <div id="grade-pick" class="chips" role="group" aria-label="Colour grade"></div>
+
+    <h2>6 · Export</h2>
+    <div id="size-pick" class="chips" role="group" aria-label="Export size"></div>
+    <button id="export" type="button" class="export">Export PNG · 1080 × 1080</button>
     <p id="status" role="status"></p>
+    <p class="fineprint">Photos stay on your machine — nothing is uploaded. Original lettering and grades; no game logos, artwork or fonts.</p>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
+  <section class="preview" aria-label="Live preview">
+    <canvas id="stage" width="900" height="900" aria-label="Cover preview"></canvas>
+    <p class="hint">Drag photos onto the preview, or click a panel to edit it.</p>
+  </section>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>

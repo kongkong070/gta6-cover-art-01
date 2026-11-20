@@ -1,12 +1,284 @@
-html, body { margin: 0; height: 100%; background: #f2f0f4; color: #1d1b22; font: 15px/1.4 system-ui, sans-serif; }
-.app { display: flex; gap: 32px; align-items: center; justify-content: center; height: 100%; padding: 24px; box-sizing: border-box; }
-.controls { display: flex; flex-direction: column; gap: 14px; width: 280px; }
-.controls h1 { margin: 0; font-size: 28px; }
-.controls p { margin: 0; color: #5c5866; }
-label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; }
-input[type=text] { font: inherit; padding: 8px; border: 1px solid #c9c4d1; border-radius: 6px; }
-button { font: inherit; font-weight: 700; padding: 10px; border: 0; border-radius: 6px; background: #1d1b22; color: #fff; cursor: pointer; }
-canvas { width: min(70vh, 60vw); height: min(70vh, 60vw); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); }
-body.shot-cover .controls { display: none; }
-body.shot-cover .app { padding: 0; }
-body.shot-cover canvas { width: 100vw; height: 100vh; box-shadow: none; }
+/* Neon Sunset Cover Studio — editor chrome. Dark glass panels over a
+   sunset gradient; the poster itself does the talking. */
+
+:root {
+  --ink: #f4eefc;
+  --ink-dim: #b9a8d6;
+  --panel: rgba(24, 12, 40, 0.82);
+  --line: rgba(255, 255, 255, 0.14);
+  --accent: #ff5db1;
+  --accent-2: #3ee6ff;
+  --gold: #ffb347;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font: 16px/1.5 "Helvetica Neue", Arial, system-ui, sans-serif;
+  background:
+    radial-gradient(1100px 500px at 85% -10%, rgba(255, 46, 154, 0.35), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(255, 122, 26, 0.3), transparent 60%),
+    linear-gradient(180deg, #150a24 0%, #1d0f33 55%, #12081f 100%);
+  min-height: 100vh;
+}
+
+.masthead {
+  padding: 28px 28px 8px;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #fff 10%, var(--gold) 45%, var(--accent) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.masthead p {
+  margin: 6px 0 0;
+  color: var(--ink-dim);
+}
+
+.studio {
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) 1fr;
+  gap: 24px;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 20px 28px 40px;
+  align-items: start;
+}
+
+.controls {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px 22px 24px;
+  backdrop-filter: blur(6px);
+}
+
+.controls h2 {
+  margin: 22px 0 10px;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.controls h2:first-child { margin-top: 0; }
+
+.controls label {
+  display: block;
+  margin: 12px 0;
+  font-size: 14px;
+  color: var(--ink-dim);
+}
+
+.controls label span { color: var(--ink); }
+
+.controls input[type="text"],
+.controls select {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--ink);
+  font: inherit;
+}
+
+.controls input[type="range"] {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  accent-color: var(--accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+  font: 13px/1.3 inherit;
+  cursor: pointer;
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.controls button:not(.chip) {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink);
+}
+
+.controls button:not(.chip):hover { background: rgba(255, 255, 255, 0.16); }
+
+.export {
+  background: linear-gradient(90deg, var(--accent), #ff7a1a) !important;
+  border: none !important;
+  font-weight: 800;
+  font-size: 16px;
+  padding: 13px 14px !important;
+}
+
+.file-pick {
+  display: block;
+  padding: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  text-align: center;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.file-pick input { display: none; }
+
+.samples { display: flex; gap: 8px; }
+
+.samples button {
+  flex: 1;
+  margin: 0 !important;
+  width: auto !important;
+}
+
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.photo-card {
+  width: 104px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.photo-card canvas {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.photo-card span {
+  display: block;
+  margin: 4px 0;
+  font-size: 12px;
+  color: var(--ink-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.photo-card button {
+  width: auto !important;
+  margin: 0 !important;
+  padding: 4px 8px !important;
+  font-size: 12px;
+}
+
+.panel-name { font-weight: 700; color: var(--ink); }
+
+.hint {
+  margin: 6px 0;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+#status {
+  min-height: 1.4em;
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--accent-2);
+}
+
+.fineprint {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+
+.preview {
+  position: sticky;
+  top: 16px;
+  text-align: center;
+}
+
+.preview canvas {
+  width: min(100%, 780px);
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  background: #12081f;
+}
+
+.preview canvas.dropping {
+  outline: 3px dashed var(--accent-2);
+  outline-offset: 6px;
+}
+
+/* Screenshot scenes: the poster alone, edge to edge. */
+body.shot-cover { background: #12081f; }
+body.shot-cover .masthead,
+body.shot-cover .controls,
+body.shot-cover .preview .hint { display: none; }
+body.shot-cover .studio {
+  display: block;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+body.shot-cover .preview {
+  position: static;
+  text-align: left;
+}
+body.shot-cover .preview canvas {
+  width: auto;
+  height: auto;
+  max-width: none;
+  border-radius: 0;
+  box-shadow: none;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .studio { grid-template-columns: 1fr; }
+  .preview { position: static; }
+}
